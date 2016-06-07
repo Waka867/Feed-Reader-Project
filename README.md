@@ -1,3 +1,21 @@
+# To run application
+
+1: In your web browser, navigate to https://github.com/Waka867/Feed-Reader-Project
+
+2: Download project zip files
+
+3: Once download is complete, locate the project zip folder then unzip the folder
+
+4: Locate unzipped folder
+
+5: Open project folder, then click on index.html to open it in your default browser. Alternatively, you can right click and select "open with" to use a web browser of your choosing.
+
+6: Scroll to the bottom of the page to view the Jasmine test section.
+
+7: To view the page menu, locate the button with three horizontal lines stacked together (top-left of the page), and click on it.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
 # Project Overview
 
 In this project you are given a web-based application that reads RSS feeds. The original developer of this application clearly saw the value in testing, they've already included [Jasmine](http://jasmine.github.io/) and even started writing their first test suite! Unfortunately, they decided to move on to start their own company and we're now left with an application with an incomplete test suite. That's where you come in.
