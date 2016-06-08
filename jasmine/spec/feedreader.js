@@ -86,7 +86,7 @@ $(function() {
             // Triggers click to remove menu-hidden class from body
             $('.menu-icon-link').trigger('click');
             // Checks to make sure body class is not menu-hidden (can be another class)
-            expect(body.attr('class')).not.toBe('menu-hidden');
+            $('body').hasClass('menu-hidden');
             // Triggers click to re-add menu-hidden class from body
             $('.menu-icon-link').trigger('click');
             // Makes sure menu-hidden is now part of body class list
@@ -95,8 +95,6 @@ $(function() {
     });
 
     /* DONE: Write a new test suite named "Initial Entries" */
-
-    var feedZero;
 
     // Test suite for initial loading function and for empty entries
     describe('Initial Entries', function() {
@@ -113,15 +111,15 @@ $(function() {
             loadFeed(0, done);
         });
 
-        it('have a single .entry, minimum', function() {
-            // Checks length of elements in entry class
-            len = $('.entry').length;
-            // Checks to make sure there is at least one item in entry class
-            expect(len).toBeGreaterThan(1);
-            // Declarations and console log to verify contents of feed 1 (for later comparison)
+        it('have at least one .entry element within .feed', function() {
+            // Feed container
             var feed0 = $('.feed');
-            var feedZero = feed0[0].outerText;
-            console.log('Feed 0 is: ' + feedZero);
+            // Feed container entrylink element
+            var feedKid = feed0[0].children;
+            // Feed container article element
+            var feedKidArticle = feedKid[0].children;
+            // Checks to make sure feed container has item somewhere within it with entry class
+            expect(feedKidArticle[0].className).toBe('entry');
         });
     });
 
@@ -129,9 +127,17 @@ $(function() {
 
     // Test suite for loading new entries and for duplicates
     describe('New Feed Selection', function() {
+        var feedOne;
+        var feedZero;
+
         // Makes sure feeds are loaded before expectations are evaluated
         beforeEach(function(done) {
-            loadFeed(1, done);
+            loadFeed(1, function() {
+                var feed1 = $('.feed');
+                console.log(feed1[0].innerText);
+                feedOne = feed1[0].innerText;
+                done();
+            });
         });
 
         /* DONE: Write a test that ensures when a new feed is loaded
@@ -139,13 +145,15 @@ $(function() {
          * Remember, loadFeed() is asynchronous.
          */
 
-        it('is different content', function(){
-            // Declarations and console log to verify that feed one is different than feed zero and that those will be compared
-            var feed1 = $('.feed');
-            var feedOne = feed1[0].outerText;
-            console.log('Feed 1 is: ' + feedOne);
+        it('is different content', function(done){
+            loadFeed(0, function() {
+                var feed0 = $('.feed');
+                console.log(feed0[0].innerText);
+                feedZero = feed0[0].innerText;
+                done();
+            });
             // Checks to make sure feed html content is unique between first and second feed samples
-            expect(feedOne).not.toEqual(feedZero);
+            expect(feedZero).not.toEqual(feedOne);
         });
     });
 }()); // self-invoking function
