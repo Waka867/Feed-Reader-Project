@@ -62,9 +62,6 @@ $(function() {
 
     // Slide-in menu test suite
     describe('The menu', function() {
-        // Declaration of var for dom elements
-        var body = $('body');
-        var bodystatus = $('body').hasClass('menu-hidden');
 
         /* DONE: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
@@ -72,9 +69,9 @@ $(function() {
          * hiding/showing of the menu element.
          */
 
-         it('is hidden by default', function() {
-            expect(bodystatus).toBe(true);
-         });
+        it('is hidden by default', function() {
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+        });
 
          /* DONE: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
@@ -86,11 +83,11 @@ $(function() {
             // Triggers click to remove menu-hidden class from body
             $('.menu-icon-link').trigger('click');
             // Checks to make sure body class is not menu-hidden (can be another class)
-            $('body').hasClass('menu-hidden');
+            expect($('body').hasClass('menu-hidden')).toBe(false);
             // Triggers click to re-add menu-hidden class from body
             $('.menu-icon-link').trigger('click');
             // Makes sure menu-hidden is now part of body class list
-            expect(bodystatus).toBe(true);
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
     });
 
@@ -112,14 +109,12 @@ $(function() {
         });
 
         it('have at least one .entry element within .feed', function() {
-            // Feed container
-            var feed0 = $('.feed');
-            // Feed container entrylink element
-            var feedKid = feed0[0].children;
-            // Feed container article element
-            var feedKidArticle = feedKid[0].children;
+            var feed0Test = $('.feed .entry-link');
+            console.log(feed0Test);
+            var feedChildTest = feed0Test[0].children;
+            console.log(feedChildTest[0].className);
             // Checks to make sure feed container has item somewhere within it with entry class
-            expect(feedKidArticle[0].className).toBe('entry');
+            expect(feedChildTest[0].className).toBe('entry');
         });
     });
 
@@ -127,17 +122,10 @@ $(function() {
 
     // Test suite for loading new entries and for duplicates
     describe('New Feed Selection', function() {
-        var feedOne;
-        var feedZero;
-
         // Makes sure feeds are loaded before expectations are evaluated
         beforeEach(function(done) {
-            loadFeed(1, function() {
-                var feed1 = $('.feed');
-                console.log(feed1[0].innerText);
-                feedOne = feed1[0].innerText;
-                done();
-            });
+            // When changed so this loads feed 0 instead of 1, test fails because test items are equal when they should not be
+            loadFeed(1, done);
         });
 
         /* DONE: Write a test that ensures when a new feed is loaded
@@ -146,14 +134,19 @@ $(function() {
          */
 
         it('is different content', function(done){
+            var feed1 = $('.feed .entry-link .entry');
+            console.log(feed1);
+            feedOne = feed1[0].innerText;
+            console.log(feedOne);
             loadFeed(0, function() {
-                var feed0 = $('.feed');
-                console.log(feed0[0].innerText);
+                var feed0 = $('.feed .entry-link .entry');
+                console.log(feed0);
                 feedZero = feed0[0].innerText;
+                console.log(feedZero);
+                // Checks to make sure feed html content is unique between first and second feed samples
+                expect(feedZero).not.toEqual(feedOne);
                 done();
             });
-            // Checks to make sure feed html content is unique between first and second feed samples
-            expect(feedZero).not.toEqual(feedOne);
         });
     });
 }()); // self-invoking function
